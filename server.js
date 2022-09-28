@@ -3,6 +3,12 @@ const bodyParser = require("body-parser");
 const {v4 : uuidv4} = require("uuid");
 const port = 3000;
 const app = express();
+const {createClient} = require('redis');
+const md5 = require('md5');
+const redisClient = createClient(
+    
+    url:'redis://default@localhost:6379'
+);
 
 app.use(bodyParser.json());
 
@@ -23,7 +29,7 @@ app.post("/login", (req,res)=>{
     res.send("Who are you?");
 
     if (loginEmail == "walker.jade123@gmail.com" && loginPassword == "jade123"){
-        const token == uuidv4();
+        const token = uuidv4();
         res.send(token);
     } else{
         res.status(401);
