@@ -6,8 +6,9 @@ const app = express();
 const {createClient} = require('redis');
 const md5 = require('md5');
 const redisClient = createClient(
-    
-    url:'redis://default@localhost:6379'
+{
+    Url:'redis://default@localhost:6379'
+}    
 );
 
 app.use(bodyParser.json());
@@ -18,6 +19,13 @@ app.listen(port, async ()=>{
 
 app.get('/', (req,res)=>{
     res.send('Hello World')
+});
+
+app.post('/user', (req,res)=>{
+    const newUserRequestObject = req.body;
+    console.log('New User:' ,JSON.stringify(newUserRequestObject));
+    redisClient.hSet('users',req.body.email,JSON.stringify(newUserRequestObject));
+    res.send('New user'+newUserRequestObject.email+' added');
 });
 
 app.post("/login", (req,res)=>{
