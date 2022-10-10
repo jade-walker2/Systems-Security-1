@@ -1,5 +1,7 @@
 const express = require('express');
 const bodyParser = require("body-parser");
+const https = require('https');
+const fs = require('fs');
 const {v4 : uuidv4} = require("uuid");
 const port = 3000;
 const app = express();
@@ -14,10 +16,18 @@ const redisClient = createClient(
 
 app.use(bodyParser.json());
 
-app.listen(port, async ()=>{
+https.createServer({
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.cert'),
+}, app).listen(port, async () => {
     await redisClient.connect();
-    console.log('listening on port'+port);
-});
+    console.log('listening...')
+    });
+
+// app.listen(port, async ()=>{
+//     await redisClient.connect();
+//     console.log('listening on port'+port);
+// });
 
 app.get('/', (req,res)=>{
     res.send('Hello World')
