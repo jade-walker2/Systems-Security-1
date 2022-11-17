@@ -9,6 +9,13 @@ spec:
     command:
       - sleep
       - "3600"
+    resources:
+      requests:
+        cpu: .125
+        memory: "500Mi"
+      limits:
+        cpu: .125
+        memory: "600Mi"
     imagePullPolicy: IfNotPresent
     name: busybox-jade
   restartPolicy: Always
