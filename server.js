@@ -8,18 +8,26 @@ const app = express();
 const {createClient} = require('redis');
 const md5 = require('md5');
 
+let loginAttemptCount = {};
+
 const redisClient = createClient(
-{
-    url:`redis://default:${process.env.REDIS_PASS}@redis-stedi-jade:6379`
-}    
+    {
+        url: "redis://localhost:6379",
+    }
 );
+
+//const redisClient = createClient(
+//{
+//    url:`redis://default:${process.env.REDIS_PASS}@redis-stedi-jade:6379`
+//}    
+//);
 
 app.use(bodyParser.json());
 
 https.createServer({
-    key: fs.readFileSync('server.key'),
-    cert: fs.readFileSync('server.cert'),
-    ca: fs.readFileSync('chain.pem')
+    key: fs.readFileSync('./SSL/server.key'),
+    cert: fs.readFileSync('./SSL/server.cert'),
+    ca: fs.readFileSync('./SSL/chain.pem')
     
 }, app).listen(port, async () => {
     console.log('listening...')
