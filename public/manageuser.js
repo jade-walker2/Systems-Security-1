@@ -90,7 +90,7 @@ function userlogin(){
         error: function(xhr){
             alert('Invalid username or password was entered.')
         },
-        contentType: "application/text",
+        contentType: "application/json",
         dataType: 'text'
     });
 
