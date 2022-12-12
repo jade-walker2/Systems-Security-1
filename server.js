@@ -10,17 +10,17 @@ const md5 = require('md5');
 
 let loginAttemptCount = {};
 
-const redisClient = createClient(
-    {
-        url: "redis://localhost:6379",
-    }
-);
-
 //const redisClient = createClient(
-//{
-//    url:`redis://default:${process.env.REDIS_PASS}@redis-stedi-jade:6379`
-//}    
+//    {
+//        url: "redis://localhost:6379",
+//    }
 //);
+
+const redisClient = createClient(
+{
+    url:`redis://default:${process.env.REDIS_PASS}@redis-stedi-jade:6379`
+}    
+);
 
 app.use(bodyParser.json());
 app.use(express.static('public'));
@@ -70,6 +70,7 @@ app.post("/login", async (req,res)=>{
     console.log("loginPassword", loginPassword);
 
     const userString=await redisClient.hGet('users', loginEmail);
+    console.log("userString"+ userString);
     const userObject=JSON.parse(userString);
     
     if (loginAttemptCount.userName == undefined){
@@ -86,7 +87,7 @@ app.post("/login", async (req,res)=>{
             res.status(404);
             res.send('User not found');
         }
-        else if (md5(loginPassword) == userObject.password){
+        else if (loginPassword == userObject.password){
             const token = uuidv4();
             res.send(token);
         } else{
